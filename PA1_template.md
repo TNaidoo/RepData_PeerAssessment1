@@ -10,7 +10,8 @@ output:
 
 The raw data is read in from the zip file (activity.zip).
 
-```{r raw_data, echo=TRUE, message=FALSE}
+
+```r
 library(readr)
 # Column types are specified as (double, Date, double)
 raw_data <- read_csv("activity.zip", col_types = "dDd")
@@ -19,7 +20,8 @@ raw_data <- read_csv("activity.zip", col_types = "dDd")
 
 ## Mean total number of steps taken per day
 
-```{r steps_taken, echo=TRUE, message=FALSE}
+
+```r
 library(dplyr)
 
 steps_per_day <- raw_data %>%
@@ -42,17 +44,19 @@ hist(steps_per_day$total_steps, plot = TRUE,
      breaks = 10,
      main = "Histogram of Total Number of Steps",
      xlab = "Total Steps")
-
 ```
+
+![](PA1_template_files/figure-html/steps_taken-1.png)<!-- -->
 
 For the raw dataset:
 
-* Mean steps taken per day: `r raw_mean`
+* Mean steps taken per day: 9,354.23
 
-* Median steps taken per day: `r raw_median`
+* Median steps taken per day: 10,395.00
 
 ## Average daily activity pattern
-```{r avg_activity, echo=TRUE, message=FALSE}
+
+```r
 library(dplyr)
 
 avg_steps_per_interval <- raw_data %>%
@@ -68,14 +72,16 @@ plot(avg_steps_per_interval$interval,
      avg_steps_per_interval$avg_steps,
      type = "l", main = "Average Activity Per Time Interval",
      xlab = "Interval", ylab = "Average Steps")
-
 ```
 
-The maximum number of average steps in any interval, is taken at the interval beginning at `r hours`h`r mins`.
+![](PA1_template_files/figure-html/avg_activity-1.png)<!-- -->
+
+The maximum number of average steps in any interval, is taken at the interval beginning at 8h35.
 
 ## Inputting missing values
 
-```{r missing_values, echo=TRUE, message=FALSE}
+
+```r
 library(dplyr)
 
 num_missing <- sum(is.na(raw_data$steps))
@@ -105,23 +111,25 @@ hist(new_steps_per_day$total_steps, plot = TRUE,
      breaks = 10,
      main = "Histogram of Total Number of Steps",
      xlab = "Total Steps")
-
 ```
 
-There are `r num_missing` missing values in the original dataset.
+![](PA1_template_files/figure-html/missing_values-1.png)<!-- -->
+
+There are 2304 missing values in the original dataset.
 
 Missing values from the dataset have been replaced with the mean (across all days) of the relevant 5-minute interval.
 
 For the new processed dataset:
 
-* Mean steps taken per day: `r new_mean`
+* Mean steps taken per day: 10,766.19
 
-* Median steps taken per day: `r new_median`
+* Median steps taken per day: 10,766.19
 
 By replacing the missing values, the mean and median have come in line. The missing values are outliers which skews the results of the mean (negatively).
 
 ## Activity patterns between weekdays and weekends
-```{r weekday, echo=TRUE, message=FALSE}
+
+```r
 library(dplyr)
 library(ggplot2)
 
@@ -139,6 +147,7 @@ ggplot2::ggplot(data = factor_avg_steps_per_interval,
        x = "Interval",
        y = "Average Steps") +
   facet_grid(day_factor ~ .)
-
 ```
+
+![](PA1_template_files/figure-html/weekday-1.png)<!-- -->
 
